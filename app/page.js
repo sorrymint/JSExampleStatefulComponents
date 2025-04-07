@@ -14,6 +14,7 @@ const DEFAULT_IMAGES = [
 ];
 
 const Gallery = ({ images = DEFAULT_IMAGES }) => {
+
     const [filters, setFilters] = useState({
         brightness: 100,
         contrast: 100,
@@ -72,13 +73,7 @@ const Gallery = ({ images = DEFAULT_IMAGES }) => {
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {images.map((src, index) => (
-                    <ImageCard
-                        key={index}
-                        src={src}
-                        brightness={filters.brightness}
-                        contrast={filters.contrast}
-                        saturation={filters.saturation}
-                    />
+                    <></>
                 ))}
             </div>
         </div>
