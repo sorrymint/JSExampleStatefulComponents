@@ -1,103 +1,88 @@
-import Image from "next/image";
+"use client";
+import { useState } from "react";
+import ImageCard from "@/components/ImageCard";
+import { Slider } from "@/components/ui/slider";
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+// Where I got these images.  https://en.wikipedia.org/wiki/Wikipedia:Featured_pictures/Artwork/Paintings
+const DEFAULT_IMAGES = [
+    "https://upload.wikimedia.org/wikipedia/commons/7/7f/Portrait_of_Yarrow_Mamout_%28Muhammad_Yaro%29%2C_1819._Charles_Willson_Peale.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/6/6c/Portrait_of_Napoleon_II_by_Thomas_Lawrence_%281818%E2%80%931819%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/5/50/Giovanni_Battista_Moroni_-_The_Tailor_%281565-1570%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/1/1c/Google_Arts_Project_-_Alexander_Hamilton_%281792_portrait%29_by_John_Trumbull.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/0/00/Ingres_Marcotte_d-Argenteuil.jpg",
+];
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+const Gallery = ({ images = DEFAULT_IMAGES }) => {
+    const [filters, setFilters] = useState({
+        brightness: 100,
+        contrast: 100,
+        saturation: 100,
+    });
+
+    const handleFilterChange = (filterName, value) => {
+        setFilters((prev) => ({
+            ...prev,
+            [filterName]: value[0],
+        }));
+    };
+
+    return (
+        <div className="space-y-8 p-4">
+            <div className="space-y-6">
+                <div className="space-y-2">
+                    <label>Brightness: {filters.brightness}%</label>
+                    <Slider
+                        min={0}
+                        max={200}
+                        step={1}
+                        value={[filters.brightness]}
+                        onValueChange={(value) =>
+                            handleFilterChange("brightness", value)
+                        }
+                    />
+                </div>
+
+                <div className="space-y-2">
+                    <label>Contrast: {filters.contrast}%</label>
+                    <Slider
+                        min={0}
+                        max={200}
+                        step={1}
+                        value={[filters.contrast]}
+                        onValueChange={(value) =>
+                            handleFilterChange("contrast", value)
+                        }
+                    />
+                </div>
+
+                <div className="space-y-2">
+                    <label>Saturation: {filters.saturation}%</label>
+                    <Slider
+                        min={0}
+                        max={200}
+                        step={1}
+                        value={[filters.saturation]}
+                        onValueChange={(value) =>
+                            handleFilterChange("saturation", value)
+                        }
+                    />
+                </div>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {images.map((src, index) => (
+                    <ImageCard
+                        key={index}
+                        src={src}
+                        brightness={filters.brightness}
+                        contrast={filters.contrast}
+                        saturation={filters.saturation}
+                    />
+                ))}
+            </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
-}
+    );
+};
+
+export default Gallery;
