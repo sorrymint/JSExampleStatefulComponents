@@ -1,5 +1,7 @@
 # Next.js Image Gallery
 
+Fork and clone down this repo. Then run `npm install` to get all necessary packages. 
+
 ## Packages
 
 This project uses third party packages from [shadcn](https://ui.shadcn.com/).
